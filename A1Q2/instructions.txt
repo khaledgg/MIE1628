@@ -1,0 +1,69 @@
+Test Locally first (WORKING):
+(1) cat data_points.txt
+(2) cat data_points.txt |python3 mapper.py
+(3) cat data_points.txt |python3 mapper.py |sort |python3 reducer.py 
+
+Alt local testing (WORKING)
+cat data_points.txt | python3 mapper.py > mapped_output.txt
+cat mapped_output.txt | python sort.py | python reducer.py > reduced_output.txt
+
+Step by step Commands:
+(1) Ensure data_330 , namespace_logs_330 are both empty
+
+(2) Open terminal as admin, cd to C:\hadoop-3.3.0\sbin
+
+cd ..
+cd ..
+cd hadoop-3.3.0\sbin
+hdfs namenode -format
+start-dfs.cmd
+start-yarn.cmd
+hdfs dfs -mkdir -p inputfiles
+hdfs dfs -put C:/MIE1628/A1Q2/data_points.txt inputfiles
+hdfs dfs -put C:/MIE1628/A1Q2/centroids.txt inputfiles
+hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar -file C:/MIE1628/A1Q2/mapper.py -mapper "C:\Users\Khaled\AppData\Local\Microsoft\WindowsApps\python3.exe C:/MIE1628/A1Q2/mapper.py" -file C:/MIE1628/A1Q2/reducer.py -reducer "C:\Users\Khaled\AppData\Local\Microsoft\WindowsApps\python3.exe C:/MIE1628/A1Q2/reducer.py" -input inputfiles -output outputcount
+
+(3) hdfs namenode -format
+
+(2) ./start-dfs.sh 
+    for windows: start-dfs.cmd
+
+(3) ./start-yarn.sh
+        start-yarn.cmd
+
+(4) hdfs dfs -mkdir -p inputfiles
+
+(5) hdfs dfs -put C:/Users/Khaled/Documents/University/Years/Masters/MIE1628/Assigments/Assignment_1/Q2/data_points.txt inputfiles
+(6) hdfs dfs -put C:/Users/Khaled/Documents/University/Years/Masters/MIE1628/Assigments/Assignment_1/Q2/centroids.txt inputfiles
+
+(6) hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar -file C:/Users/Khaled/Documents/University/Years/Masters/MIE1628/Assigments/Assignment_1/Q2/mapper.py -mapper "C:\Users\Khaled\AppData\Local\Microsoft\WindowsApps\python3.exe C:/Users/Khaled/Documents/University/Years/Masters/MIE1628/Assigments/Assignment_1/Q2/mapper.py" -file C:/Users/Khaled/Documents/University/Years/Masters/MIE1628/Assigments/Assignment_1/Q2/reducer.py -reducer "C:\Users\Khaled\AppData\Local\Microsoft\WindowsApps\python3.exe C:/Users/Khaled/Documents/University/Years/Masters/MIE1628/Assigments/Assignment_1/Q2/reducer.py" -input inputfiles -output outputcount
+
+(7) hdfs dfs -cat outputcount/part-00000
+
+To quit:
+    /stop-yarn.cmd
+    /stop-dfs.cmd
+
+
+Debugging, seeing output of mapper
+hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar -D mapreduce.job.reduces=0 -file C:/Users/Khaled/Documents/University/Years/Masters/MIE1628/Assigments/Assignment_1/Q2/mapper.py -mapper "C:\Users\Khaled\AppData\Local\Microsoft\WindowsApps\python3.exe C:/Users/Khaled/Documents/University/Years/Masters/MIE1628/Assigments/Assignment_1/Q2/mapper.py" -input inputfiles/data_points.txt -output outputcount
+
+
+#####
+Attempt 2 with help
+
+same initial
+
+hdfs dfs -mkdir /input-directory
+
+cd into A1Q2
+
+hdfs dfs -put data_points.txt /input-directory/
+
+Failed: hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar -files C:\MIE1628\A1Q2\mapper.py,C:\MIE1628\A1Q2\reducer.py,C:\MIE1628\A1Q2\centroids.txt -mapper mapper.py -reducer reducer.py -input /input-directory/data_points.txt -output /output-directory
+Failed: hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar -files mapper.py,reducer.py,centroids.txt -mapper mapper.py -reducer reducer.py -input /input-directory/data_points.txt -output /output-directory
+Failed: hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar -files mapper.py,reducer.py,centroids.txt -mapper mapper.py -reducer reducer.py -input /input-directory/data_points.txt -output /output-directory
+
+Runs: hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar -files "mapper.py,reducer.py,centroids.txt" -mapper mapper.py -reducer reducer.py -input /input-directory/data_points.txt -output /output-directory
+
+hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar -files "mapper.py,reducer.py,centroids.txt" -mapper mapper.py -reducer reducer.py -input /input-directory/data_points.txt -output /output-directory

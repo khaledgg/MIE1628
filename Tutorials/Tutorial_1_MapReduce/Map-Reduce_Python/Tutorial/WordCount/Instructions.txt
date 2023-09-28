@@ -73,8 +73,7 @@ C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar
 
 (4) hdfs dfs -mkdir -p inputword
 
-(5) hdfs dfs -put /home/hdoop/Desktop/WordCountPython/input.txt inputword
-/Users/Khaled/Documents/University/Years/Masters/MIE1628/Tutorials/Tutorial_1_MapReduce/Map-Reduce_Python/Tutorial/WordCount/input.txt
+(5) hdfs dfs -put /Users/Khaled/Documents/University/Years/Masters/MIE1628/Tutorials/Tutorial_1_MapReduce/Map-Reduce_Python/Tutorial/WordCount/input.txt input word
 
 (6) hadoop jar C:\hadoop-3.3.0\share\hadoop\tools\lib\hadoop-streaming-3.3.0.jar -file C:\Users\Khaled\Documents\University\Years\Masters\MIE1628\Tutorials\Tutorial_1_MapReduce\Map-Reduce_Python\Tutorial\WordCount\mapper.py -mapper "C:\Users\Khaled\AppData\Local\Microsoft\WindowsApps\python3.exe C:\Users\Khaled\Documents\University\Years\Masters\MIE1628\Tutorials\Tutorial_1_MapReduce\Map-Reduce_Python\Tutorial\WordCount\mapper.py" -file C:\Users\Khaled\Documents\University\Years\Masters\MIE1628\Tutorials\Tutorial_1_MapReduce\Map-Reduce_Python\Tutorial\WordCount\reducer.py -reducer "C:\Users\Khaled\AppData\Local\Microsoft\WindowsApps\python3.exe C:\Users\Khaled\Documents\University\Years\Masters\MIE1628\Tutorials\Tutorial_1_MapReduce\Map-Reduce_Python\Tutorial\WordCount\reducer.py" -input inputword -output outputcount
 
