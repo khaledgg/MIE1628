@@ -1,48 +1,37 @@
-#!C:\Users\Khaled\AppData\Local\Microsoft\WindowsApps\python3.exe 
+#!/usr/bin/env python
+"""mapper.py"""
 
 import sys
+from math import sqrt
 
-def dist(x1, y1, x2, y2):
-    # using straight line heuristic (instead of Manhattan, etc)
-    distance = ((x1-x2)**2 + (y1-y2)**2)**0.5
-    return distance
-
-# get centroids from
-def read_centroids():
-    # store centroid in a dictionary: n: [x, y]
-    centroids = {}
-    # read centroids from a file
-    with open("centroids.txt", "r") as f:
-        for line in f:
-            items = line.strip().split(',')
-    
-            c_number = int(items[0])
-            x = float(items[1])
-            y = float(items[2])
-
-            centroids[c_number] = [float(x),float(y)]
-
+# Load initial centroids from a text file and add them to an array
+def getCentroids(filepath):
+    centroids = []
+    with open(filepath, 'r') as file:
+        for line in file:
+            fields = line.strip().split(',')
+            cluster_id = int(fields[0])
+            coordinates = (float(fields[1]), float(fields[2]))
+            centroids.append((cluster_id, coordinates))
     return centroids
 
-centroids = read_centroids()
+# Create clusters based on initial centroids
+def createClusters(centroids):
+    for line in sys.stdin:
+        data_point_coords = tuple(map(float, line.strip().split(',')))
+        closest_centroid_id = None
+        closest_distance = float('inf')
+        for centroid in centroids:
+            centroid_id, centroid_coords = centroid
+            distance = sqrt((data_point_coords[0] - centroid_coords[0])**2 + (data_point_coords[1] - centroid_coords[1])**2)
+            if distance < closest_distance:
+                closest_distance = distance
+                closest_centroid_id = centroid_id
+        
+        # Output the closest centroid ID and the data point coordinates
+        print(f'{closest_centroid_id}\t{data_point_coords[0]},{data_point_coords[1]}')
 
-for line in sys.stdin:
-    # for each line get the x, y value split by comma
-    x, y = line.split(",")
-    x = float(x)
-    y = float(y)
-
-    cluster = None
-    min_dist = float('inf')  # max_float
-
-    # get nearest centroid
-    for centroid_id in centroids:
-        temp_dist = dist(x, y, centroids[centroid_id][0], centroids[centroid_id][1])
-        if temp_dist < min_dist:
-            cluster = centroid_id
-            min_dist = temp_dist
-    
-    output = f"{cluster},{x},{y}"
-    # print(f"Mapper output: {output}", file=sys.stderr)
-    print(output)
-
+if __name__ == "__main__":
+    centroids_filepath = 'centroids.txt'
+    centroids = getCentroids(centroids_filepath)
+    createClusters(centroids)

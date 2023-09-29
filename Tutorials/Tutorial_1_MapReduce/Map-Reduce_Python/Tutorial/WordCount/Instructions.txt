@@ -82,3 +82,7 @@ C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar
 To quit:
     /stop-yarn.cmd
     /stop-dfs.cmd
+
+
+On Desktop:
+hadoop jar C:\hadoop-3.3.0\share\hadoop\tools\lib\hadoop-streaming-3.3.0.jar -mapper "C:\Users\khale\AppData\Local\Microsoft\WindowsApps\python3.exe C:\MIE1628\A1Q1\mapper.py" -reducer "C:\Users\khale\AppData\Local\Microsoft\WindowsApps\python3.exe C:\MIE1628\A1Q1\reducer.py" -input inputtext -output outputcount  

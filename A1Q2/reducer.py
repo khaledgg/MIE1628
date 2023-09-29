@@ -1,39 +1,34 @@
-#!C:\Users\Khaled\AppData\Local\Microsoft\WindowsApps\python3.exe 
+#!/usr/bin/env python
+"""reducer.py"""
 
 import sys
-import logging
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    handlers=[logging.StreamHandler()])
+def calculateNewCentroids():
+    current_centroid_id = None
+    points_sum = (0, 0)
+    points_count = 0
 
-current_cluster = None
-points = []
+    for line in sys.stdin:
+        centroid_id, coordinates = line.strip().split('\t')
+        x, y = map(float, coordinates.split(','))
 
-for line in sys.stdin:
-    # logging.info(f'Processing line: {line.strip()}')
+        if current_centroid_id != centroid_id:
+            if current_centroid_id is not None:
+                new_centroid_x = points_sum[0] / points_count
+                new_centroid_y = points_sum[1] / points_count
+                print(f'{current_centroid_id},{new_centroid_x},{new_centroid_y}')
+            current_centroid_id = centroid_id
+            points_sum = (0, 0)
+            points_count = 0
+        
+        points_sum = (points_sum[0] + x, points_sum[1] + y)
+        points_count += 1
 
-    items = line.strip().split(',')
-    
-    try:
-        cluster = int(items[0])
-        x = float(items[1])
-        y = float(items[2])
-    except ValueError as e:
-        logging.error(f'ValueError: {e} on line: {line.strip()}')
-        continue
-    
-    if current_cluster == cluster:
-        points.append((x, y))
-    else:
-        if current_cluster is not None:
-            centroid_x = sum(p[0] for p in points) / len(points)
-            centroid_y = sum(p[1] for p in points) / len(points)
-            print(f"{current_cluster},{centroid_x},{centroid_y}")
-        points = [(x, y)]
-        current_cluster = cluster
+    # Output the centroid for the last cluster
+    if current_centroid_id is not None:
+        new_centroid_x = points_sum[0] / points_count
+        new_centroid_y = points_sum[1] / points_count
+        print(f'{current_centroid_id},{new_centroid_x},{new_centroid_y}')
 
-if current_cluster == cluster:
-    centroid_x = sum(p[0] for p in points) / len(points)
-    centroid_y = sum(p[1] for p in points) / len(points)
-    print(f"{current_cluster},{centroid_x},{centroid_y}")
+if __name__ == "__main__":
+    calculateNewCentroids()

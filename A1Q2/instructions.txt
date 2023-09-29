@@ -67,3 +67,17 @@ Failed: hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0
 Runs: hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar -files "mapper.py,reducer.py,centroids.txt" -mapper mapper.py -reducer reducer.py -input /input-directory/data_points.txt -output /output-directory
 
 hadoop jar C:/hadoop-3.3.0/share/hadoop/tools/lib/hadoop-streaming-3.3.0.jar -files "mapper.py,reducer.py,centroids.txt" -mapper mapper.py -reducer reducer.py -input /input-directory/data_points.txt -output /output-directory
+
+
+## Attempt 3 - Desktop
+Create directories
+
+hdfs dfs -mkdir -p /input/kmeans
+hdfs dfs -mkdir -p /output/kmeans
+
+Upload data
+
+hdfs dfs -put centroids.txt /input/kmeans/centroids.txt
+hdfs dfs -put data_points.txt /input/kmeans/data_points.txt
+
+hadoop jar C:\hadoop-3.3.0\share\hadoop\tools\lib\hadoop-streaming-3.3.0.jar -mapper "C:\Users\khale\AppData\Local\Microsoft\WindowsApps\python3.exe C:\MIE1628\A1Q2\mapper.py" -reducer "C:\Users\khale\AppData\Local\Microsoft\WindowsApps\python3.exe C:\MIE1628\A1Q2\reducer.py" -input /input/kmeans/* -output /output/kmeans/results
